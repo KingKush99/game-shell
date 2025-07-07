@@ -1,0 +1,101 @@
+.page-refresh-fireworks {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.page-refresh-fireworks.active {
+  display: block;
+}
+
+/* White launch streaks */
+.firework-launch-streak {
+  position: absolute;
+  width: 6px;
+  height: 80px;
+  border-radius: 3px;
+  transform-origin: bottom center;
+  opacity: 0.9;
+  transition: all 0.1s ease-out;
+}
+
+/* Red, White, Blue explosion streaks - half thickness of launch streaks */
+.firework-explosion-streak {
+  position: absolute;
+  width: 3px;
+  height: 40px;
+  border-radius: 1.5px;
+  transform-origin: bottom center;
+  transition: all 0.05s ease-out;
+  animation: streakGlow 0.1s ease-out infinite alternate;
+}
+
+@keyframes streakGlow {
+  0% {
+    filter: brightness(1);
+  }
+  100% {
+    filter: brightness(1.3);
+  }
+}
+
+/* Enhanced glow effects for different colors */
+.firework-explosion-streak[style*="#ff0000"] {
+  box-shadow: 
+    0 0 4px #ff0000,
+    0 0 8px #ff0000,
+    0 0 12px #ff0000;
+}
+
+.firework-explosion-streak[style*="#ffffff"] {
+  box-shadow: 
+    0 0 4px #ffffff,
+    0 0 8px #ffffff,
+    0 0 12px #ffffff;
+}
+
+.firework-explosion-streak[style*="#0000ff"] {
+  box-shadow: 
+    0 0 4px #0000ff,
+    0 0 8px #0000ff,
+    0 0 12px #0000ff;
+}
+
+/* Launch streak glow */
+.firework-launch-streak {
+  box-shadow: 
+    0 0 6px #ffffff,
+    0 0 12px #ffffff,
+    0 0 18px #ffffff;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .firework-launch-streak {
+    width: 4px;
+    height: 60px;
+  }
+  
+  .firework-explosion-streak {
+    width: 2px;
+    height: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .firework-launch-streak {
+    width: 3px;
+    height: 45px;
+  }
+  
+  .firework-explosion-streak {
+    width: 1.5px;
+    height: 22px;
+  }
+}
+

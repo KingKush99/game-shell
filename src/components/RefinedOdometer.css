@@ -1,0 +1,141 @@
+/* Refined Odometer CSS - Realistic single-digit rotation */
+.odometer-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 1rem 0;
+}
+
+.odometer-label {
+  color: white;
+  font-size: 0.875rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  letter-spacing: 0.05em;
+}
+
+.odometer-display {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, #1f2937, #374151);
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: 2px solid #4b5563;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.digit-container {
+  display: flex;
+  align-items: center;
+}
+
+.digit-display {
+  width: 40px;
+  height: 50px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.25rem;
+  border: 1px solid #6b7280;
+}
+
+.black-digit {
+  background: linear-gradient(135deg, #111827, #1f2937);
+}
+
+.red-digit {
+  background: linear-gradient(135deg, #dc2626, #991b1b);
+}
+
+.digit-current {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.digit-next {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.digit-display.animating .digit-current {
+  transform: translateY(-100%);
+}
+
+.digit-display.animating .digit-next {
+  transform: translateY(-100%);
+}
+
+.digit-separator {
+  width: 2px;
+  height: 30px;
+  background: linear-gradient(to bottom, #6b7280, #9ca3af, #6b7280);
+  margin: 0 1px;
+  border-radius: 1px;
+}
+
+/* Add subtle glow effect for red digit */
+.red-digit {
+  box-shadow: 0 0 10px rgba(220, 38, 38, 0.3);
+}
+
+/* Hover effect for the entire odometer */
+.odometer-display:hover {
+  transform: scale(1.02);
+  transition: transform 0.2s ease;
+}
+
+/* Responsive design */
+@media (max-width: 640px) {
+  .digit-display {
+    width: 32px;
+    height: 40px;
+  }
+  
+  .digit-current,
+  .digit-next {
+    font-size: 1.25rem;
+  }
+  
+  .digit-separator {
+    height: 24px;
+  }
+  
+  .odometer-label {
+    font-size: 0.75rem;
+  }
+}
+
+/* Animation for milestone celebrations */
+@keyframes celebrate {
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(1.05); }
+  50% { transform: scale(1.1); }
+  75% { transform: scale(1.05); }
+}
+
+.odometer-display.celebrating {
+  animation: celebrate 1s ease-in-out;
+}
+

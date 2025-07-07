@@ -1,0 +1,190 @@
+/* Precise Fireworks CSS - 15 second duration with white streaks */
+
+.precise-fireworks-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.firework-wrapper {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+/* Launch streak - white streak shooting upward at angle */
+.firework-streak {
+  position: absolute;
+  bottom: 0;
+  width: 4px;
+  height: 0;
+  background: linear-gradient(to top, 
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 255, 255, 0.8) 50%,
+    rgba(255, 255, 255, 0.4) 80%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform-origin: bottom center;
+  animation: launchStreak linear forwards;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+}
+
+@keyframes launchStreak {
+  0% {
+    height: 0;
+    opacity: 1;
+  }
+  50% {
+    height: 300px;
+    opacity: 1;
+  }
+  100% {
+    height: 400px;
+    opacity: 0;
+  }
+}
+
+/* Explosion */
+.firework-explosion {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  transform: translate(-50%, -50%);
+}
+
+.explosion-particle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 3px;
+  height: 40px;
+  background: linear-gradient(to top,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 200, 200, 0.8) 30%,
+    rgba(200, 200, 255, 0.6) 60%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform-origin: bottom center;
+  animation: explodeParticle 0.8s ease-out forwards;
+  box-shadow: 0 0 4px rgba(255, 255, 255, 0.6);
+}
+
+@keyframes explodeParticle {
+  0% {
+    height: 0;
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    height: 60px;
+    opacity: 1;
+    transform: translateX(-50%) scale(1.2);
+  }
+  100% {
+    height: 80px;
+    opacity: 0;
+    transform: translateX(-50%) scale(0.8);
+  }
+}
+
+/* Falling particles */
+.firework-fall {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  transform: translate(-50%, -50%);
+}
+
+.falling-particle {
+  position: absolute;
+  top: 0;
+  width: 2px;
+  height: 8px;
+  background: linear-gradient(to bottom,
+    rgba(255, 255, 255, 0.8) 0%,
+    rgba(255, 200, 200, 0.6) 50%,
+    rgba(200, 200, 255, 0.4) 100%
+  );
+  animation: fallParticle ease-in forwards;
+  box-shadow: 0 0 2px rgba(255, 255, 255, 0.4);
+}
+
+@keyframes fallParticle {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateY(200px) scale(0.8);
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateY(400px) scale(0.3);
+    opacity: 0;
+  }
+}
+
+/* Additional glow effects for better visibility */
+.firework-streak::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -2px;
+  right: -2px;
+  bottom: 0;
+  background: linear-gradient(to top, 
+    rgba(255, 255, 255, 0.3) 0%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  filter: blur(2px);
+}
+
+.explosion-particle::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  bottom: -1px;
+  background: inherit;
+  filter: blur(1px);
+  opacity: 0.5;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .firework-streak {
+    width: 3px;
+  }
+  
+  .explosion-particle {
+    width: 2px;
+    height: 30px;
+  }
+  
+  .falling-particle {
+    width: 1.5px;
+    height: 6px;
+  }
+  
+  @keyframes launchStreak {
+    0% {
+      height: 0;
+      opacity: 1;
+    }
+    50% {
+      height: 200px;
+      opacity: 1;
+    }
+    100% {
+      height: 250px;
+      opacity: 0;
+    }
+  }
+}
+

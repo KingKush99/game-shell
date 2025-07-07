@@ -1,0 +1,360 @@
+/* Enhanced Mini Slots CSS */
+.mini-slots-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.slot-machine {
+  background: linear-gradient(135deg, #7f1d1d, #991b1b, #7f1d1d);
+  border: 4px solid #fbbf24;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  max-width: 400px;
+  width: 100%;
+}
+
+.slot-reel {
+  width: 80px;
+  height: 80px;
+  background: white;
+  border: 2px solid #9ca3af;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  transition: transform 0.1s ease;
+}
+
+.slot-reel.spinning {
+  animation: spin 0.1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotateY(0deg); }
+  to { transform: rotateY(360deg); }
+}
+
+.pull-handle {
+  width: 32px;
+  height: 64px;
+  background: linear-gradient(to bottom, #dc2626, #991b1b);
+  border: 2px solid #fbbf24;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  position: relative;
+}
+
+.pull-handle:hover {
+  transform: scale(1.05);
+}
+
+.pull-handle.pulled {
+  transform: translateY(16px);
+}
+
+.handle-knob {
+  width: 24px;
+  height: 24px;
+  background: #fbbf24;
+  border-radius: 50%;
+  margin: 8px auto 0;
+}
+
+.tier-badge {
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.tier-bronze { background: linear-gradient(to right, #d97706, #92400e); }
+.tier-silver { background: linear-gradient(to right, #9ca3af, #6b7280); }
+.tier-gold { background: linear-gradient(to right, #fbbf24, #d97706); }
+.tier-platinum { background: linear-gradient(to right, #60a5fa, #3b82f6); }
+.tier-diamond { background: linear-gradient(to right, #22d3ee, #0891b2); }
+.tier-master { background: linear-gradient(to right, #a78bfa, #8b5cf6); }
+
+.win-animation {
+  animation: winPulse 1s ease-in-out infinite;
+}
+
+@keyframes winPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+.spin-button {
+  background: linear-gradient(to right, #10b981, #059669);
+  transition: all 0.3s ease;
+}
+
+.spin-button:hover:not(:disabled) {
+  background: linear-gradient(to right, #059669, #047857);
+  transform: scale(1.02);
+}
+
+.spin-button:disabled {
+  background: #6b7280;
+  cursor: not-allowed;
+}
+
+/* Responsive design */
+@media (max-width: 640px) {
+  .slot-machine {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+  
+  .slot-reel {
+    width: 60px;
+    height: 60px;
+    font-size: 2rem;
+  }
+  
+  .pull-handle {
+    width: 24px;
+    height: 48px;
+  }
+  
+  .handle-knob {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+
+/* Odometer-style Reel Animation */
+.reel-container {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+}
+
+.horizontal-line {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, #FFD700 50%, transparent 100%);
+  z-index: 10;
+}
+
+.reel-symbol {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  background: white;
+  border-radius: 8px;
+  border: 2px solid #9CA3AF;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  transition: all 0.5s ease;
+}
+
+.reel-symbol.animating {
+  animation: reelFlip 0.5s ease-in-out;
+}
+
+@keyframes reelFlip {
+  0% { transform: rotateX(0deg); }
+  50% { transform: rotateX(90deg); }
+  100% { transform: rotateX(0deg); }
+}
+
+.symbol-content {
+  position: relative;
+  z-index: 5;
+  transition: opacity 0.3s ease;
+}
+
+.reel-symbol.animating .symbol-content {
+  opacity: 0;
+}
+
+.symbol-animation {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  animation: symbolRoll 0.5s linear infinite;
+  z-index: 3;
+}
+
+@keyframes symbolRoll {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-100%); }
+}
+
+.rolling-symbol {
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  background: white;
+}
+
+.vertical-separator {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: -1px;
+  width: 2px;
+  background: linear-gradient(180deg, transparent 0%, #FFD700 50%, transparent 100%);
+  z-index: 10;
+}
+
+.vertical-separator:last-child {
+  display: none;
+}
+
+/* Enhanced Slot Machine Styling */
+.reel-container:hover .reel-symbol {
+  transform: scale(1.05);
+  border-color: #FFD700;
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+}
+
+/* Responsive Design for Reels */
+@media (max-width: 480px) {
+  .reel-container {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .reel-symbol {
+    width: 48px;
+    height: 48px;
+    font-size: 24px;
+  }
+  
+  .rolling-symbol {
+    min-height: 48px;
+    font-size: 24px;
+  }
+}
+
+
+
+/* Interactive Slot Lever */
+.slot-lever {
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  user-select: none;
+  transform-origin: center top;
+}
+
+.slot-lever:hover {
+  transform: scale(1.05);
+}
+
+.slot-lever.pulled {
+  transform: rotate(15deg) scale(0.95);
+  animation: leverRotate 0.3s ease-in-out;
+}
+
+@keyframes leverRotate {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(25deg) scale(0.9); }
+  100% { transform: rotate(15deg) scale(0.95); }
+}
+
+.lever-handle {
+  width: 20px;
+  height: 40px;
+  background: linear-gradient(to right, #8B4513, #A0522D);
+  border: 2px solid #FFD700;
+  border-radius: 10px;
+  position: relative;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.lever-arm {
+  width: 6px;
+  height: 60px;
+  background: linear-gradient(to bottom, #C0C0C0, #808080);
+  border: 1px solid #FFD700;
+  border-radius: 3px;
+  margin: 0 auto;
+  position: relative;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.lever-knob {
+  width: 24px;
+  height: 24px;
+  background: radial-gradient(circle, #FFD700, #FFA500);
+  border: 2px solid #B8860B;
+  border-radius: 50%;
+  margin: 0 auto;
+  position: relative;
+  top: -2px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+}
+
+.lever-knob::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 12px;
+  height: 12px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.6), transparent);
+  border-radius: 50%;
+}
+
+/* Remove any overflow scroll from reels container */
+.reel-container {
+  overflow: visible !important;
+}
+
+/* Ensure no horizontal scroll */
+.flex.space-x-2 {
+  overflow: visible !important;
+}
+
+/* Responsive lever design */
+@media (max-width: 640px) {
+  .lever-handle {
+    width: 16px;
+    height: 32px;
+  }
+  
+  .lever-arm {
+    width: 4px;
+    height: 48px;
+  }
+  
+  .lever-knob {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .lever-knob::before {
+    top: 3px;
+    left: 3px;
+    width: 10px;
+    height: 10px;
+  }
+}
+
