@@ -74,6 +74,7 @@ const DailyDiceGame = ({ language = 'en', onClose, onComplete }) => {
   const [holdTimer, setHoldTimer] = useState(null);
   const [canRoll, setCanRoll] = useState(false);
   const [result, setResult] = useState(null);
+  const [showCompletionPopup, setShowCompletionPopup] = useState(false);
 
   // Check if user has already played today
   useEffect(() => {
@@ -195,6 +196,11 @@ const DailyDiceGame = ({ language = 'en', onClose, onComplete }) => {
       
       setResult(newResult);
       setGameState('result');
+      
+      // Show completion popup after a short delay
+      setTimeout(() => {
+        setShowCompletionPopup(true);
+      }, 1500);
       
       // Save to localStorage
       const today = new Date().toDateString();
@@ -348,6 +354,54 @@ const DailyDiceGame = ({ language = 'en', onClose, onComplete }) => {
           </div>
         </div>
       </div>
+      
+      {/* Completion Popup */}
+      {showCompletionPopup && (
+        <div className="completion-popup-overlay">
+          <div className="completion-popup">
+            <div className="completion-header">
+              <h2>🎉 Daily Task Completed! 🎉</h2>
+            </div>
+            <div className="completion-content">
+              <div className="completion-icon">✅</div>
+              <h3>Congratulations!</h3>
+              <p>You have successfully completed today's daily dice challenge!</p>
+              <div className="completion-stats">
+                <div className="stat-item">
+                  <span className="stat-label">Your Roll:</span>
+                  <span className="stat-value">{result?.total}</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-label">Dice:</span>
+                  <div className="completion-dice">
+                    {result?.dice.map((value, index) => (
+                      <DiceFace key={index} value={value} />
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <p className="completion-note">Come back tomorrow for your next daily challenge!</p>
+              <div className="completion-actions">
+                <button 
+                  className="completion-btn primary"
+                  onClick={() => {
+                    setShowCompletionPopup(false);
+                    onClose();
+                  }}
+                >
+                  Awesome!
+                </button>
+                <button 
+                  className="completion-btn secondary"
+                  onClick={() => setShowCompletionPopup(false)}
+                >
+                  Continue Playing
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
