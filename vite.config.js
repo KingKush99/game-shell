@@ -5,8 +5,7 @@ import path from 'path'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: 
-    "/game-shell/",
+  base: "/game-shell/",
   plugins: [react(),tailwindcss()],
   resolve: {
     alias: {

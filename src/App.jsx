@@ -1260,6 +1260,14 @@ function App() {
         />
       )}
       
+      {/* Profile Page */}
+      {showProfilePage && (
+        <ProfilePage 
+          language={language} 
+          onClose={() => setShowProfilePage(false)}
+        />
+      )}
+      
       {/* Auction Page */}
       {showAuctionPage && (
         <AuctionPage 
