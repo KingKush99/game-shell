@@ -66,7 +66,7 @@ const RedCup = ({ isShaking, isRolling, position, onClick, onMouseDown, onMouseU
 };
 
 const DailyDiceGame = ({ language = 'en', onClose, onComplete }) => {
-  const [gameState, setGameState] = useState('waiting'); // waiting, shaking, rolling, result
+  const [gameState, setGameState] = useState('waiting'); // waiting, shaking, rolling, result, completed
   const [dice, setDice] = useState([]);
   const [cupPosition, setCupPosition] = useState({ x: 50, y: 40 });
   const [isShaking, setIsShaking] = useState(false);
@@ -74,6 +74,7 @@ const DailyDiceGame = ({ language = 'en', onClose, onComplete }) => {
   const [holdTimer, setHoldTimer] = useState(null);
   const [canRoll, setCanRoll] = useState(false);
   const [result, setResult] = useState(null);
+  const [showCompletionPopup, setShowCompletionPopup] = useState(false);
 
   // Check if user has already played today
   useEffect(() => {
@@ -195,6 +196,11 @@ const DailyDiceGame = ({ language = 'en', onClose, onComplete }) => {
       
       setResult(newResult);
       setGameState('result');
+      
+      // Show completion popup after a short delay
+      setTimeout(() => {
+        setShowCompletionPopup(true);
+      }, 1500);
       
       // Save to localStorage
       const today = new Date().toDateString();
@@ -348,6 +354,43 @@ const DailyDiceGame = ({ language = 'en', onClose, onComplete }) => {
           </div>
         </div>
       </div>
+      
+      {/* Completion Popup */}
+      {showCompletionPopup && (
+        <div className="completion-popup-overlay">
+          <div className="completion-popup">
+            <div className="completion-header">
+              <h2>🎉 Daily Task Completed! 🎉</h2>
+            </div>
+            <div className="completion-content">
+              <div className="completion-icon">✅</div>
+              <h3>Congratulations!</h3>
+              <p>You have successfully completed your daily dice roll!</p>
+              {result && (
+                <div className="completion-result">
+                  <p>Your roll: <strong>{result.total}</strong></p>
+                  <div className="completion-dice">
+                    {result.dice.map((value, index) => (
+                      <DiceFace key={index} value={value} />
+                    ))}
+                  </div>
+                </div>
+              )}
+              <p className="completion-reward">🎁 Daily reward earned!</p>
+              <p className="completion-next">Come back tomorrow for your next daily roll!</p>
+              <button 
+                className="completion-close-btn" 
+                onClick={() => {
+                  setShowCompletionPopup(false);
+                  onClose();
+                }}
+              >
+                Awesome!
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -620,7 +620,16 @@ function App() {
       />
       
       {/* Corner Buttons */}
-
+      {/* Profile Icon - Top Left */}
+      <div className="fixed top-4 left-4 z-50">
+        <button 
+          onClick={() => setShowProfilePage(true)}
+          className="w-12 h-12 bg-gradient-to-br from-violet-600 to-violet-800 rounded-full flex items-center justify-center text-xl hover:scale-110 transition-transform"
+          title="Profile"
+        >
+          👤
+        </button>
+      </div>
 
       <div className="fixed top-4 right-4 z-50">
         <button 
@@ -1075,6 +1084,14 @@ function App() {
           language={language} 
           onClose={() => setShowTournamentModal(false)}
           onShowTerms={() => setShowTermsModal(true)}
+        />
+      )}
+      
+      {/* Profile Page */}
+      {showProfilePage && (
+        <ProfilePage 
+          language={language} 
+          onClose={() => setShowProfilePage(false)}
         />
       )}
       
