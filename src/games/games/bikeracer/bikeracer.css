@@ -1,0 +1,5 @@
+/* Prefixed styles to avoid conflicts with the shell */
+.bikeracer-wrap { width: 100%; height: 100%; display: flex; flex-direction: column; gap: 8px; }
+.bikeracer-toolbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.bikeracer-canvas { width: 100%; height: calc(100vh - 220px); max-height: 720px; background:#fff; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+.bikeracer-help { font-size: 0.95rem; line-height: 1.35rem; }
