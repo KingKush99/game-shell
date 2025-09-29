@@ -5,7 +5,7 @@ import tailwindcss from '@tailwindcss/vite'
 import path from 'path'
 
 export default defineConfig({
-  base: '/game-shell/', // ✅ IMPORTANT for GitHub Pages
+  base: '/game-shell/', // 👈 CRUCIAL for GitHub Pages
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
