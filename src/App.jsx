@@ -27,6 +27,9 @@ import DailyDiceGame from './components/DailyDiceGame';
 import AuctionWindow from './components/AuctionWindow';
 import AuctionPage from './components/AuctionPage';
 import SettingsModal from './components/SettingsModal';
+// NEW: Multiplayer imports
+import MultiplayerHub from './components/MultiplayerHub';
+import VerificationModal from './components/VerificationModal';
 
 function App() {
   const [language, setLanguage] = useState('en');
@@ -87,6 +90,15 @@ function App() {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [cursorRotation, setCursorRotation] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  // NEW: Multiplayer state
+  const [showMultiplayerHub, setShowMultiplayerHub] = useState(false);
+  const [userSubscriptions, setUserSubscriptions] = useState({
+    youtube: localStorage.getItem('youtubeSubscribed') === 'true',
+    instagram: localStorage.getItem('instagramFollowed') === 'true'
+  });
+  const [userCoins, setUserCoins] = useState(parseInt(localStorage.getItem('userCoins')) || 1250);
+  const [showVerificationModal, setShowVerificationModal] = useState(false);
+  const [verificationType, setVerificationType] = useState('');
 
   const fileInputRef = useRef(null);
   const videoInputRef = useRef(null);
@@ -179,6 +191,7 @@ function App() {
     };
   }, []);
 
+  // UPDATED: Button configuration with multiplayer hub action
   const buttonConfigs = {
     live: { emoji: '🔴', color: 'from-red-600 to-red-800', action: 'newWindow' },
     shop: { emoji: '🛒', color: 'from-green-600 to-green-800', action: 'modal' },
@@ -186,7 +199,7 @@ function App() {
     variations: { emoji: '🎲', color: 'from-purple-600 to-purple-800', action: 'dropdown' },
     players: { emoji: '👥', color: 'from-blue-600 to-blue-800', action: 'dropdown' },
     singlePlayer: { emoji: '🎮', color: 'from-indigo-600 to-indigo-800', action: 'newWindow' },
-    multiplayer: { emoji: '🌐', color: 'from-teal-600 to-teal-800', action: 'newWindow' },
+    multiplayer: { emoji: '🌐', color: 'from-teal-600 to-teal-800', action: 'multiplayerHub' }, // CHANGED
     campaign: { emoji: '⚔️', color: 'from-orange-600 to-orange-800', action: 'modal' },
     rulesGuide: { emoji: '📖', color: 'from-emerald-600 to-emerald-800', action: 'modal' },
     themes: { emoji: '🎨', color: 'from-pink-600 to-pink-800', action: 'modal' },
@@ -196,7 +209,10 @@ function App() {
     music: { emoji: '🎵', color: 'from-rose-600 to-rose-800', action: 'modal' },
     settings: { emoji: '⚙️', color: 'from-gray-600 to-gray-800', action: 'modal' },
     faq: { emoji: '❓', color: 'from-red-700 to-red-900', action: 'dropdown' }
-  };  const handleButtonClick = (buttonKey) => {
+  };
+
+  // UPDATED: Button click handler with multiplayer support
+  const handleButtonClick = (buttonKey) => {
     const usage = buttonUsage[buttonKey] || 0;
     setButtonUsage(prev => ({ ...prev, [buttonKey]: usage + 1 }));
 
@@ -221,8 +237,9 @@ function App() {
       return;
     }
     
+    // NEW: Multiplayer hub handler
     if (buttonKey === 'multiplayer') {
-      setShowMultiplayerLobby(true);
+      setShowMultiplayerHub(true);
       return;
     }
     
@@ -640,7 +657,7 @@ function App() {
         </button>
         {showHamburgerMenu && (
           <div className="absolute top-16 right-0 bg-gray-800 rounded-lg p-4 min-w-48 shadow-xl">
-            <div className="text-yellow-400 font-bold mb-2">💰 Coins: 1,250</div>
+            <div className="text-yellow-400 font-bold mb-2">💰 Coins: {userCoins.toLocaleString()}</div>
             <div className="space-y-2">
               <button 
                 onClick={() => {
@@ -1077,7 +1094,6 @@ function App() {
         </div>
       </footer>
 
-
       {/* Tournament Registration Modal */}
       {showTournamentModal && (
         <TournamentModal 
@@ -1273,6 +1289,43 @@ function App() {
         <AuctionPage 
           language={language} 
           onClose={() => setShowAuctionPage(false)}
+        />
+      )}
+      
+      {/* NEW: Multiplayer Hub */}
+      {showMultiplayerHub && (
+        <MultiplayerHub
+          language={language}
+          onClose={() => setShowMultiplayerHub(false)}
+          userCoins={userCoins}
+          setUserCoins={setUserCoins}
+          userSubscriptions={userSubscriptions}
+          setUserSubscriptions={setUserSubscriptions}
+          setShowVerificationModal={setShowVerificationModal}
+          setVerificationType={setVerificationType}
+        />
+      )}
+      
+      {/* NEW: Verification Modal */}
+      {showVerificationModal && (
+        <VerificationModal
+          language={language}
+          type={verificationType}
+          onClose={() => setShowVerificationModal(false)}
+          onComplete={(type, success) => {
+            if (success) {
+              if (type === 'youtube' || type === 'tournament') {
+                setUserSubscriptions(prev => ({ ...prev, youtube: true }));
+                localStorage.setItem('youtubeSubscribed', 'true');
+              }
+              if (type === 'instagram' || type === 'tournament') {
+                setUserSubscriptions(prev => ({ ...prev, instagram: true }));
+                localStorage.setItem('instagramFollowed', 'true');
+              }
+            }
+            setShowVerificationModal(false);
+          }}
+          userSubscriptions={userSubscriptions}
         />
       )}
     </div>
