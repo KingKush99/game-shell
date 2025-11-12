@@ -18,8 +18,11 @@ jobs:
         with:
           node-version: '18'
           
-      - name: Install dependencies
-        run: npm ci
+      - name: Install dependencies (bypass conflicts)
+        run: |
+          echo "=== INSTALLING WITH CONFLICT RESOLUTION ==="
+          npm install --legacy-peer-deps
+          echo "=== DEPENDENCIES INSTALLED ==="
         
       - name: Build with fixed config
         run: |
