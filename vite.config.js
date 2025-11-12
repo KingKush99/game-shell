@@ -5,7 +5,7 @@ import tailwindcss from '@tailwindcss/vite'
 import path from 'path'
 
 export default defineConfig({
-  base: '/game-shell/', // 👈 GitHub Pages base path
+  base: '/game-shell/',
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
@@ -13,17 +13,16 @@ export default defineConfig({
     },
   },
   build: {
-    target: 'es2015', // Ensure compatibility
+    target: 'es2015',
     rollupOptions: {
       output: {
-        format: 'es', // ES modules format
+        format: 'es',
         manualChunks: {
-          'react-vendor': ['react', 'react-dom'], // Bundle React separately
+          'react-vendor': ['react', 'react-dom'],
           'tailwind-vendor': ['tailwindcss']
         }
       }
     },
-    // Ensure proper chunking
     chunkSizeWarningLimit: 1000,
     minify: 'esbuild'
   }
