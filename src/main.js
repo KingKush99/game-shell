@@ -1,11 +1,15 @@
-// main.js (renamed from main.jsx)
+// src/main.js (pure JavaScript, no JSX)
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App.jsx' // Keep .jsx for components
+import App from './App.jsx' // This imports JSX from another file (OK)
 import './index.css'
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+// Create root element using pure JS
+const root = ReactDOM.createRoot(document.getElementById('root'))
+
+// Render using React.createElement (no JSX syntax)
+root.render(
+  React.createElement(React.StrictMode, null, 
+    React.createElement(App, null)
+  )
 )
