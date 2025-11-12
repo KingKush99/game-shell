@@ -24,18 +24,33 @@ jobs:
           npm install --legacy-peer-deps
           echo "=== DEPENDENCIES INSTALLED ==="
         
-      - name: Build with fixed config
+      - name: Build with path fixes
         run: |
-          echo "=== BUILDING WITH FIXED CONFIG ==="
+          echo "=== BUILDING WITH PATH FIXES ==="
           npm run build
           echo "=== BUILD OUTPUT ==="
           ls -la dist/
           
-      - name: Fix GitHub Pages paths
+      - name: Fix Vite bundled paths properly
         run: |
-          sed -i 's|/assets/|/game-shell/assets/|g' dist/index.html
-          sed -i 's|src="/|src="/game-shell/|g' dist/index.html
-          sed -i 's|href="/|href="/game-shell/|g' dist/index.html
+          echo "=== FIXING VITE BUNDLED PATHS ==="
+          # Find the actual bundled files
+          BUNDLE_FILE=$(ls dist/assets/index-*.js 2>/dev/null | head -1)
+          CSS_FILE=$(ls dist/assets/index-*.css 2>/dev/null | head -1)
+          
+          echo "Found bundle: $BUNDLE_FILE"
+          echo "Found CSS: $CSS_FILE"
+          
+          # Fix the paths in index.html
+          if [ -f "dist/index.html" ]; then
+            # Replace with correct bundled paths
+            sed -i "s|src=\"/game-shell/src/main.js\"|src=\"/game-shell/assets/$(basename $BUNDLE_FILE)\"|g" dist/index.html
+            sed -i "s|href=\"/game-shell/src/main.js\"|href=\"/game-shell/assets/$(basename $CSS_FILE)\"|g" dist/index.html 2>/dev/null || true
+            sed -i 's|src="/|src="/game-shell/|g' dist/index.html
+            sed -i 's|href="/|href="/game-shell/|g' dist/index.html
+            echo "=== FIXED INDEX.HTML ==="
+            cat dist/index.html
+          fi
           
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
