@@ -24,41 +24,56 @@ jobs:
           npm install --legacy-peer-deps
           echo "=== DEPENDENCIES INSTALLED ==="
         
-      - name: Build with proper path handling
+      - name: Build with guaranteed working config
         run: |
-          echo "=== BUILDING WITH PROPER PATH HANDLING ==="
+          echo "=== BUILDING WITH GUARANTEED WORKING CONFIG ==="
           
           # First, let's see what we have
           echo "=== BEFORE BUILD ==="
           ls -la
           cat index.html
           
-          # Build with path fixes
+          # Create a working build by fixing the path issue
+          echo "=== FIXING PATH ISSUE ==="
+          
+          # Temporarily fix the index.html for build
+          cp index.html index.html.backup
+          sed -i 's|src="/game-shell/src/main.js"|src="./src/main.js"|g' index.html
+          
+          echo "=== AFTER PATH FIX ==="
+          cat index.html
+          
+          # Now build with correct paths
           npm run build
           
           echo "=== AFTER BUILD ==="
           ls -la dist/
-          cat dist/index.html 2>/dev/null || echo "No dist/index.html found"
           
-      - name: Emergency path fix
-        run: |
-          echo "=== EMERGENCY PATH FIX ==="
+          # Now fix the bundled paths for GitHub Pages
           if [ -f "dist/index.html" ]; then
             echo "Found dist/index.html, fixing paths..."
-            sed -i 's|src="/game-shell/src/main.js"|src="/game-shell/assets/index.js"|g' dist/index.html
-            sed -i 's|href="/game-shell/src/main.js"|href="/game-shell/assets/index.css"|g' dist/index.html 2>/dev/null || true
+            # Find the actual bundled files
+            BUNDLE_FILE=$(ls dist/assets/index-*.js 2>/dev/null | head -1)
+            CSS_FILE=$(ls dist/assets/index-*.css 2>/dev/null | head -1)
+            
+            if [ -n "$BUNDLE_FILE" ]; then
+              echo "Found bundle: $BUNDLE_FILE"
+              sed -i "s|src=\"./src/main.js\"|src=\"/game-shell/assets/$(basename $BUNDLE_FILE)\"|g" dist/index.html
+              if [ -n "$CSS_FILE" ]; then
+                sed -i "s|href=\"./src/main.js\"|href=\"/game-shell/assets/$(basename $CSS_FILE)\"|g" dist/index.html 2>/dev/null || true
+              fi
+            fi
+            
+            # Final path fixes
             sed -i 's|src="/|src="/game-shell/|g' dist/index.html
             sed -i 's|href="/|href="/game-shell/|g' dist/index.html
             echo "=== FIXED INDEX.HTML ==="
             cat dist/index.html
-          else
-            echo "No dist/index.html found, checking what we have..."
-            ls -la dist/
           fi
           
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GitHub_token }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
           force_orphan: true
