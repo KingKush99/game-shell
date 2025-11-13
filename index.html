@@ -2,13 +2,17 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/x-icon" href="/game-shell/favicon.ico" />
+    <!-- Use a root-relative path. Vite will add the '/game-shell/' base path. -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Game Shell - Reusable Menu Template</title>
   </head>
   <body>
     <div id="root"></div>
-    <!-- This is the corrected line -->
-    <script type="module" src="/game-shell/src/main.js"></script>
+    <!-- 
+      Use a root-relative path. Vite will automatically convert this to 
+      '/game-shell/src/main.js' in the browser.
+    -->
+    <script type="module" src="/src/main.js"></script>
   </body>
 </html>
