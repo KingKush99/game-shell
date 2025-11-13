@@ -10,9 +10,9 @@
   <body>
     <div id="root"></div>
     <!-- 
-      Use a root-relative path. Vite will automatically convert this to 
-      '/game-shell/src/main.js' in the browser.
+      Use the '@' alias defined in vite.config.js.
+      Vite will correctly resolve this to '/game-shell/src/main.js'.
     -->
-    <script type="module" src="/src/main.js"></script>
+    <script type="module" src="/@/main.js"></script>
   </body>
 </html>
