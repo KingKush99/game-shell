@@ -1,11 +1,11 @@
-// vite.config.js - GH-PAGES COMPATIBLE
+// vite.config.js - MODIFIED TO REMOVE 'base'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import path from 'path'
 
 export default defineConfig({
-  base: '/game-shell/', // Must match your repo name
+  // The 'base' line has been removed from here.
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
