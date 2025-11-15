@@ -1,360 +1,216 @@
-/* Enhanced Mini Slots CSS */
-.mini-slots-container {
+/* Backdrop covers entire screen, but we pin the modal bottom‑right */
+.mini-slots-backdrop {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.8);
+  inset: 0;
+  background: transparent; /* no dark overlay so it feels light */
+  z-index: 60;
+}
+
+/* Modal anchored bottom-right, same approximate size as chatbot (w ~320, h ~380) */
+.mini-slots-modal {
+  position: absolute;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  width: 320px;
+  max-width: 90vw;
+  height: 380px;
+  max-height: 90vh;
+  background: linear-gradient(135deg, #111827, #1f2937);
+  border-radius: 18px;
+  border: 2px solid rgba(252, 211, 77, 0.9);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.9);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* Header */
+.mini-slots-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: radial-gradient(circle at top left, #4b5563, #111827);
+  border-bottom: 1px solid rgba(156, 163, 175, 0.4);
+}
+
+.mini-slots-title {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.mini-slots-close {
+  border: none;
+  background: none;
+  color: #f87171; /* red X, no background */
+  font-size: 18px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+/* Reel area */
+.mini-slots-reel-area {
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  padding: 12px;
 }
 
-.slot-machine {
-  background: linear-gradient(135deg, #7f1d1d, #991b1b, #7f1d1d);
-  border: 4px solid #fbbf24;
-  border-radius: 1rem;
-  padding: 2rem;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-  max-width: 400px;
+.mini-slots-reels {
+  display: grid;
+  gap: 8px;
   width: 100%;
 }
 
-.slot-reel {
-  width: 80px;
-  height: 80px;
-  background: white;
-  border: 2px solid #9ca3af;
-  border-radius: 0.5rem;
+.mini-slots-reel {
+  background: radial-gradient(circle, #111827 0%, #000000 75%);
+  border-radius: 12px;
+  border: 2px solid #4b5563;
+  color: #f9fafb;
+  font-size: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2.5rem;
-  transition: transform 0.1s ease;
+  padding: 8px 0;
+  box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.8);
 }
 
-.slot-reel.spinning {
-  animation: spin 0.1s linear infinite;
+.mini-slots-reel.spinning {
+  animation: miniSlotsSpin 0.6s ease-in-out infinite;
 }
 
-@keyframes spin {
-  from { transform: rotateY(0deg); }
-  to { transform: rotateY(360deg); }
+@keyframes miniSlotsSpin {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-12px);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
-.pull-handle {
-  width: 32px;
-  height: 64px;
-  background: linear-gradient(to bottom, #dc2626, #991b1b);
-  border: 2px solid #fbbf24;
-  border-radius: 9999px;
-  cursor: pointer;
-  transition: transform 0.3s ease;
+/* Bottom controls row */
+.mini-slots-controls-row {
+  padding: 10px 12px 14px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Drop‑up wrappers (bet + reels) */
+.mini-slots-dropup-wrapper {
   position: relative;
+  display: inline-block;
 }
 
-.pull-handle:hover {
-  transform: scale(1.05);
-}
-
-.pull-handle.pulled {
-  transform: translateY(16px);
-}
-
-.handle-knob {
-  width: 24px;
-  height: 24px;
-  background: #fbbf24;
-  border-radius: 50%;
-  margin: 8px auto 0;
-}
-
-.tier-badge {
-  padding: 0.5rem 1rem;
+.mini-slots-dropup-button {
+  width: 100%;
+  padding: 6px 10px;
   border-radius: 9999px;
-  font-weight: bold;
+  border: 1px solid rgba(209, 213, 219, 0.5);
+  background: #111827;
+  color: #e5e7eb;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
   text-align: center;
 }
 
-.tier-bronze { background: linear-gradient(to right, #d97706, #92400e); }
-.tier-silver { background: linear-gradient(to right, #9ca3af, #6b7280); }
-.tier-gold { background: linear-gradient(to right, #fbbf24, #d97706); }
-.tier-platinum { background: linear-gradient(to right, #60a5fa, #3b82f6); }
-.tier-diamond { background: linear-gradient(to right, #22d3ee, #0891b2); }
-.tier-master { background: linear-gradient(to right, #a78bfa, #8b5cf6); }
-
-.win-animation {
-  animation: winPulse 1s ease-in-out infinite;
+/* Drop‑up menu appears above the button */
+.mini-slots-dropup-wrapper:hover .mini-slots-dropup-menu {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
 }
 
-@keyframes winPulse {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.1); opacity: 0.8; }
-}
-
-.spin-button {
-  background: linear-gradient(to right, #10b981, #059669);
-  transition: all 0.3s ease;
-}
-
-.spin-button:hover:not(:disabled) {
-  background: linear-gradient(to right, #059669, #047857);
-  transform: scale(1.02);
-}
-
-.spin-button:disabled {
-  background: #6b7280;
-  cursor: not-allowed;
-}
-
-/* Responsive design */
-@media (max-width: 640px) {
-  .slot-machine {
-    margin: 1rem;
-    padding: 1.5rem;
-  }
-  
-  .slot-reel {
-    width: 60px;
-    height: 60px;
-    font-size: 2rem;
-  }
-  
-  .pull-handle {
-    width: 24px;
-    height: 48px;
-  }
-  
-  .handle-knob {
-    width: 18px;
-    height: 18px;
-  }
-}
-
-
-/* Odometer-style Reel Animation */
-.reel-container {
-  position: relative;
-  width: 64px;
-  height: 64px;
-  flex-shrink: 0;
-}
-
-.horizontal-line {
+.mini-slots-dropup-menu {
   position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent 0%, #FFD700 50%, transparent 100%);
-  z-index: 10;
-}
-
-.reel-symbol {
-  position: relative;
-  width: 64px;
-  height: 64px;
-  background: white;
-  border-radius: 8px;
-  border: 2px solid #9CA3AF;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 32px;
-  transition: all 0.5s ease;
-}
-
-.reel-symbol.animating {
-  animation: reelFlip 0.5s ease-in-out;
-}
-
-@keyframes reelFlip {
-  0% { transform: rotateX(0deg); }
-  50% { transform: rotateX(90deg); }
-  100% { transform: rotateX(0deg); }
-}
-
-.symbol-content {
-  position: relative;
-  z-index: 5;
-  transition: opacity 0.3s ease;
-}
-
-.reel-symbol.animating .symbol-content {
-  opacity: 0;
-}
-
-.symbol-animation {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  flex-direction: column;
-  animation: symbolRoll 0.5s linear infinite;
-  z-index: 3;
-}
-
-@keyframes symbolRoll {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-100%); }
-}
-
-.rolling-symbol {
-  min-height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 32px;
-  background: white;
-}
-
-.vertical-separator {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: -1px;
-  width: 2px;
-  background: linear-gradient(180deg, transparent 0%, #FFD700 50%, transparent 100%);
-  z-index: 10;
-}
-
-.vertical-separator:last-child {
-  display: none;
-}
-
-/* Enhanced Slot Machine Styling */
-.reel-container:hover .reel-symbol {
-  transform: scale(1.05);
-  border-color: #FFD700;
-  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
-}
-
-/* Responsive Design for Reels */
-@media (max-width: 480px) {
-  .reel-container {
-    width: 48px;
-    height: 48px;
-  }
-  
-  .reel-symbol {
-    width: 48px;
-    height: 48px;
-    font-size: 24px;
-  }
-  
-  .rolling-symbol {
-    min-height: 48px;
-    font-size: 24px;
-  }
-}
-
-
-
-/* Interactive Slot Lever */
-.slot-lever {
-  position: relative;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  user-select: none;
-  transform-origin: center top;
-}
-
-.slot-lever:hover {
-  transform: scale(1.05);
-}
-
-.slot-lever.pulled {
-  transform: rotate(15deg) scale(0.95);
-  animation: leverRotate 0.3s ease-in-out;
-}
-
-@keyframes leverRotate {
-  0% { transform: rotate(0deg) scale(1); }
-  50% { transform: rotate(25deg) scale(0.9); }
-  100% { transform: rotate(15deg) scale(0.95); }
-}
-
-.lever-handle {
-  width: 20px;
-  height: 40px;
-  background: linear-gradient(to right, #8B4513, #A0522D);
-  border: 2px solid #FFD700;
+  bottom: 115%;
+  left: 50%;
+  transform: translate(-50%, 8px);
+  background: #020617;
   border-radius: 10px;
-  position: relative;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
+  padding: 4px;
+  min-width: 110px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.16s ease-out, transform 0.16s ease-out;
+  z-index: 10;
 }
 
-.lever-arm {
-  width: 6px;
-  height: 60px;
-  background: linear-gradient(to bottom, #C0C0C0, #808080);
-  border: 1px solid #FFD700;
-  border-radius: 3px;
-  margin: 0 auto;
-  position: relative;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+.mini-slots-dropup-item {
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: #e5e7eb;
+  font-size: 12px;
+  padding: 6px 8px;
+  text-align: center;
+  border-radius: 8px;
+  cursor: pointer;
 }
 
-.lever-knob {
-  width: 24px;
-  height: 24px;
-  background: radial-gradient(circle, #FFD700, #FFA500);
-  border: 2px solid #B8860B;
-  border-radius: 50%;
-  margin: 0 auto;
-  position: relative;
-  top: -2px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+.mini-slots-dropup-item:hover {
+  background: rgba(55, 65, 81, 0.9);
 }
 
-.lever-knob::before {
-  content: '';
-  position: absolute;
-  top: 4px;
-  left: 4px;
-  width: 12px;
-  height: 12px;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.6), transparent);
-  border-radius: 50%;
+.mini-slots-dropup-item.active {
+  background: rgba(251, 191, 36, 0.16);
+  color: #fbbf24;
+  font-weight: 700;
 }
 
-/* Remove any overflow scroll from reels container */
-.reel-container {
-  overflow: visible !important;
+/* Circular PUSH button */
+.mini-slots-push-button {
+  width: 74px;
+  height: 74px;
+  border-radius: 9999px;
+  border: 3px solid #f97373;
+  background: radial-gradient(circle at 30% 30%, #fecaca, #ef4444);
+  color: #111827;
+  font-size: 16px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  box-shadow:
+    0 10px 18px rgba(0, 0, 0, 0.9),
+    inset 0 3px 5px rgba(254, 242, 242, 0.6);
+  transition: transform 0.08s ease-out, box-shadow 0.08s ease-out;
 }
 
-/* Ensure no horizontal scroll */
-.flex.space-x-2 {
-  overflow: visible !important;
+.mini-slots-push-button:active {
+  transform: translateY(2px);
+  box-shadow:
+    0 5px 10px rgba(0, 0, 0, 0.7),
+    inset 0 1px 3px rgba(254, 242, 242, 0.45);
 }
 
-/* Responsive lever design */
+.mini-slots-push-button.disabled {
+  cursor: default;
+  opacity: 0.65;
+}
+
+/* Small screens */
 @media (max-width: 640px) {
-  .lever-handle {
-    width: 16px;
-    height: 32px;
-  }
-  
-  .lever-arm {
-    width: 4px;
-    height: 48px;
-  }
-  
-  .lever-knob {
-    width: 20px;
-    height: 20px;
-  }
-  
-  .lever-knob::before {
-    top: 3px;
-    left: 3px;
-    width: 10px;
-    height: 10px;
+  .mini-slots-modal {
+    right: 0.75rem;
+    bottom: 0.75rem;
+    width: 95vw;
+    height: 360px;
   }
 }
-

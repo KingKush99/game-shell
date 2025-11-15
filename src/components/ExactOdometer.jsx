@@ -1,29 +1,28 @@
 import React from 'react';
 import './ExactOdometer.css';
 
+/**
+ * ExactOdometer
+ * - Always uses white digits
+ * - Horizontal white bar runs BEHIND the numbers
+ * - Last digit has red background like a mechanical counter
+ */
 const ExactOdometer = ({ value, label }) => {
-  const formatValue = (num) => {
-    return num.toString().padStart(7, '0');
-  };
-
-  const digits = formatValue(value).split('');
+  const padded = String(value).padStart(7, '0'); // 7 digits for nicer look
 
   return (
-    <div className="exact-odometer-container">
-      <div className="odometer-label">{label}</div>
-      <div className="exact-odometer">
-        {digits.map((digit, index) => (
-          <div 
-            key={index} 
-            className="odometer-digit-container"
+    <div className="exact-odometer">
+      <div className="exact-odometer-label">{label}</div>
+      <div className="exact-odometer-row">
+        {padded.split('').map((digit, idx) => (
+          <div
+            key={idx}
+            className={
+              'exact-odometer-cell' +
+              (idx === padded.length - 1 ? ' last-digit' : '')
+            }
           >
-            <div className="horizontal-line"></div>
-            <div className="odometer-digit">
-              <div className="digit-content">
-                {digit}
-              </div>
-            </div>
-            <div className="vertical-separator"></div>
+            <span>{digit}</span>
           </div>
         ))}
       </div>
@@ -32,4 +31,3 @@ const ExactOdometer = ({ value, label }) => {
 };
 
 export default ExactOdometer;
-
